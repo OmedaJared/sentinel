@@ -1,0 +1,33 @@
+# Archivos que no deben copiarse dentro de la imagen de Docker.
+.git
+.gitignore
+.venv
+__pycache__/
+*.py[cod]
+.ruff_cache/
+.mypy_cache/
+.pytest_cache/
+
+# Datos locales: nunca viajan dentro de la imagen.
+*.db
+*.sqlite3
+clave_secreta.key
+certificados/
+
+# Salidas de compilación y paquetes.
+build/
+dist/
+*.spec
+
+# Documentación y pruebas locales.
+.dockerignore
+Dockerfile
+docker-compose.yml
+render.yaml
+Procfile
+*.md
+*.txt
+
+# Sistema
+.DS_Store
+Thumbs.db

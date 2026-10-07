@@ -1,0 +1,26 @@
+[project]
+name = "prevee"
+version = "0.1.0"
+description = "Sistema de gestión escolar y prevención"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "flask",
+    "flask-socketio",
+    "python-dotenv",
+    "flask-login>=0.6.3",
+    "flask-sqlalchemy>=3.1.1",
+    "segno>=1.6.1",
+    "waitress>=3.0.0",
+    "cryptography>=42.0.0",
+    "gunicorn>=22.0.0; sys_platform != 'win32'",
+    "psycopg[binary]>=3.1.0",
+]
+
+[project.scripts]
+sentinel = "servidor:main"
+
+[dependency-groups]
+dev = [
+    "pyinstaller>=6.0.0",
+]

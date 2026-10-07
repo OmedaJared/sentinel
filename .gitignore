@@ -1,0 +1,38 @@
+# Datos locales: nunca deben compartirse ni subirse al repositorio.
+centinela.db
+sentinel.db
+*.sqlite3
+clave_secreta.key
+certificados/
+
+# Configuración secreta del despliegue en línea (.env.example sí se comparte).
+.env
+.env.local
+.env.produccion
+
+# Salidas de compilación y empaquetado
+build/
+dist/
+*.spec
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.ruff_cache/
+.mypy_cache/
+.pytest_cache/
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Archivos de salida temporales
+prod_out.txt
+prod_err.txt
+https_out.txt
+https_err.txt
+exe_out.txt
+exe_err.txt
+demo_out.txt
+demo_err.txt

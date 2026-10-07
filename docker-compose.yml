@@ -1,0 +1,43 @@
+# Levanta Sentinel en línea con base de datos PostgreSQL y datos persistentes.
+#
+#   docker compose up --build -d        → arranca
+#   docker compose logs -f web          → ver registros
+#   docker compose down                 → detener
+#
+# Con esto la app queda disponible en http://localhost:8080
+# y desde cualquier dispositivo de la red usando http://TU-IP:8080
+services:
+  base:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: sentinel
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-sentinel-clave-cambiar}
+      POSTGRES_DB: sentinel
+    volumes:
+      - datos_bd:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U sentinel -d sentinel" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  web:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      base:
+        condition: service_healthy
+    environment:
+      ENTORNO: produccion
+      PORT: "8080"
+      # Genera una con:  python -c "import secrets; print(secrets.token_hex(32))"
+      SECRET_KEY: ${SECRET_KEY:?Debes definir SECRET_KEY en el archivo .env}
+      DATABASE_URL: postgresql://sentinel:${POSTGRES_PASSWORD:-sentinel-clave-cambiar}@base:5432/sentinel
+      DATOS_DEMO: ${DATOS_DEMO:-0}
+      WEB_CONCURRENCY: ${WEB_CONCURRENCY:-2}
+    ports:
+      - "${PUERTO_EXTERNO:-8080}:8080"
+
+volumes:
+  datos_bd:
