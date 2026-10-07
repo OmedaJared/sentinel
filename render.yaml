@@ -1,38 +1,26 @@
-# Despliegue en Render (https://render.com) con un clic.
-#
-# 1. Sube este proyecto a un repositorio de GitHub.
-# 2. En Render: New → Blueprint → elige tu repositorio.
-# 3. Render crea el servicio web y la base de datos solos.
-#
-# SECRET_KEY se genera automáticamente; no tienes que escribirla.
+# Exported from Render on 2026-10-07T03:40:57Z
+version: "1"
 services:
-  - type: web
-    name: sentinel
-    runtime: python
-    plan: free
-    buildCommand: pip install uv && uv sync --frozen --no-dev
-    # Gunicorn con hilos: 1 proceso y varios hilos porque Socket.IO usa
-    # memoria compartida en modo threading.
-    startCommand: uv run --no-dev python servidor.py
-    healthCheckPath: /salud
-    envVars:
-      - key: ENTORNO
-        value: produccion
-      - key: PYTHON_VERSION
-        value: "3.12"
-      - key: WEB_CONCURRENCY
-        value: "1"
-      - key: SECRET_KEY
-        generateValue: true
-      - key: DATABASE_URL
-        fromDatabase:
-          name: sentinel-db
-          property: connectionString
-      - key: DATOS_DEMO
-        value: "1"
-
-databases:
-  - name: sentinel-db
-    plan: free
-    databaseName: sentinel
-    user: sentinel
+- type: web
+  name: sentinel
+  runtime: python
+  repo: https://github.com/OmedaJared/sentinel
+  plan: free
+  envVars:
+  - key: DATOS_DEMO
+    sync: false
+  - key: DATABASE_URL
+    sync: false
+  - key: SECRET_KEY
+    sync: false
+  - key: WEB_CONCURRENCY
+    sync: false
+  - key: PYTHON_VERSION
+    sync: false
+  - key: ENTORNO
+    sync: false
+  region: oregon
+  buildCommand: pip install uv && uv sync --frozen --no-dev
+  startCommand: uv run --no-dev python servidor.py
+  healthCheckPath: /salud
+  autoDeployTrigger: commit
